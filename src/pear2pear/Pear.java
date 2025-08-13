@@ -12,7 +12,7 @@ public class Pear {
     public static void main(String[] args) throws IOException {
 
         if (args.length == 0) {
-            System.out.println("Usage: java Pear [server|client <host>]");
+            System.out.println("Usage: java pear2pear/Pear.java [server|client <host>]");
             return;
         }
 
@@ -20,7 +20,7 @@ public class Pear {
             startServer();
         } else if (args[0].equalsIgnoreCase("client")) {
             if (args.length < 2) {
-                System.out.println("Usage: java Pear client <host>");
+                System.out.println("Usage: java pear2pear/Pear.java client <host>");
                 return;
             }
             startClient(args[1]);
