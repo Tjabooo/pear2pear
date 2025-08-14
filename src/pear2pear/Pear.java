@@ -111,7 +111,7 @@ public class Pear {
 
     /***
      * Generates a random passkey for authentication.
-     * The passkey is a 12-byte random value encoded as a 16-character Base
+     * The passkey is a 12-byte random value encoded as a 16-character Base64
      * @return
      */
     private static String generatePasskey() {
