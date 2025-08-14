@@ -11,15 +11,11 @@ cd pear2pear/src
 
 **Usage:**
 
-On **Linux/MacOS:**
+On **Windows/Linux/MacOS**:
 
 ```bash
 java pear2pear/Pear.java [server|client <host>]
 ```
-
-On **Windows:**
-
-no idea
 
 **Example usage:**
 
