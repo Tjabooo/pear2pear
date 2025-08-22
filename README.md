@@ -25,3 +25,6 @@ java pear2pear/Pear.java server
 java pear2pear/Pear.java client
 ...follow instructions
 ```
+
+## Notes
+- If you can't connect to the relay server, it is not running. Sorry.
