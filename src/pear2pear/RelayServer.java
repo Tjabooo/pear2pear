@@ -192,11 +192,11 @@ public class RelayServer {
                 if (size > MAX_FILE_SIZE) { System.out.println("[relay] REJECT: " + ip + " big"); closeQuiet(s); return; }
                 synchronized (pair) {
                     pair.fileName = fileName; pair.size = size; pair.salt = parts[2]; pair.iv = parts[3]; pair.senderStream = in;
-                    if (pair.dataReceiver != null) { logTransfer(key, fileName, size, s.getInetAddress().getHostAddress(), pair.dataReceiver.getInetAddress().getHostAddress()); sendMetaAndPipe(key, pair); }
+                    if (pair.dataReceiver != null) { logTransfer(fileName, size, s.getInetAddress().getHostAddress(), pair.dataReceiver.getInetAddress().getHostAddress()); sendMetaAndPipe(key, pair); }
                 }
             } else {
                 synchronized (pair) {
-                    if (pair.fileName != null && pair.dataSender != null) { logTransfer(key, pair.fileName, pair.size, pair.dataSender.getInetAddress().getHostAddress(), s.getInetAddress().getHostAddress()); sendMetaAndPipe(key, pair); }
+                    if (pair.fileName != null && pair.dataSender != null) { logTransfer(pair.fileName, pair.size, pair.dataSender.getInetAddress().getHostAddress(), s.getInetAddress().getHostAddress()); sendMetaAndPipe(key, pair); }
                 }
                 while (!s.isClosed()) { try { Thread.sleep(1000); } catch (InterruptedException ignored) {} if (pair.size == -1 && pair.dataSender == null) break; }
             }
