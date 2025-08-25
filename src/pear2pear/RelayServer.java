@@ -239,8 +239,8 @@ public class RelayServer {
         if (b == -1 && baos.size() == 0) return null; return baos.toString().trim();
     }
 
-    private void logTransfer(String passkey, String fileName, long size, String senderIp, String receiverIp) {
-        String log = String.format("%s | passkey=%s | file=%s | size=%d | sender=%s | receiver=%s", sdf.format(System.currentTimeMillis()), passkey, fileName, size, senderIp, receiverIp);
+    private void logTransfer(String fileName, long size, String senderIp, String receiverIp) {
+        String log = String.format("%s | file=%s | size=%d | sender=%s | receiver=%s", sdf.format(System.currentTimeMillis()), fileName, size, senderIp, receiverIp);
         System.out.println("[relay-log] " + log);
         try (FileWriter fw = new FileWriter(logFile, true)) { fw.write(log + "\n"); } catch (IOException ignored) {}
     }
