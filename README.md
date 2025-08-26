@@ -16,13 +16,13 @@ javac pear2pear/*.java
 
 ## Sending file (server role)
 ```bash
-java pear2pear/Pear.java server
+java pear2pear.Pear server
 ...follow instructions
 ```
 
 ## Receiving file (client role)
 ```bash
-java pear2pear/Pear.java client
+java pear2pear.Pear client
 ...follow instructions
 ```
 
