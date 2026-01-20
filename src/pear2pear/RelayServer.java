@@ -78,7 +78,6 @@ public class RelayServer {
                             handleControl(s);
                         } finally {
                             decActive(ip);
-                            closeQuiet(s);
                         }
                     });
                 } catch (RejectedExecutionException e) {
@@ -105,7 +104,6 @@ public class RelayServer {
                             handleData(s);
                         } finally {
                             decActive(ip);
-                            closeQuiet(s);
                         }
                     });
                 } catch (RejectedExecutionException e) {
