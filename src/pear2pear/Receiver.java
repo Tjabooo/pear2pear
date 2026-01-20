@@ -125,7 +125,11 @@ class Receiver {
                     return;
                 }
                 SecretKeySpec key = deriveKey(passkey, salt);
-                Path outFile = dir.resolve(fileName);
+                Path outFile = dir.resolve(fileName).normalize();
+                if (!outFile.startsWith(dir.normalize())) {
+                    System.out.println("Invalid filename from sender.");
+                    return;
+                }
                 System.out.println("Receiving file: " + fileName + " (" + size + " bytes, encrypted)");
                 try (CipherInputStream cis = new CipherInputStream(in, getDecryptCipher(key, iv));
                      OutputStream fos = Files.newOutputStream(outFile)) {

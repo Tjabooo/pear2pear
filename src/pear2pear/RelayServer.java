@@ -41,6 +41,14 @@ public class RelayServer {
     private static final int PAIR_CLEANUP_SEC = 300; // 5min
     private final File logFile = new File("relay-transfers.log");
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final ExecutorService pool =
+        new ThreadPoolExecutor(
+                32, 
+                100,
+                60L, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(500),
+                new ThreadPoolExecutor.AbortPolicy()
+            );
 
     public void start() {
         System.out.println("Relay started on control:" + CONTROL_PORT + " data:" + DATA_PORT + ". Press Ctrl+C to stop.");
@@ -64,13 +72,19 @@ public class RelayServer {
                     s.close();
                     continue;
                 }
-                new Thread(() -> {
-                    try {
-                        handleControl(s);
-                    } finally {
-                        decActive(ip);
-                    }
-                }, "ctl-" + s.getPort()).start();
+                try {
+                    pool.execute(() -> {
+                        try {
+                            handleControl(s);
+                        } finally {
+                            decActive(ip);
+                            closeQuiet(s);
+                        }
+                    });
+                } catch (RejectedExecutionException e) {
+                    decActive(ip);
+                    closeQuiet(s);
+                }
             }
         } catch (IOException e) {
             System.err.println("Control server stopped: " + e.getMessage());
@@ -85,13 +99,19 @@ public class RelayServer {
                 Socket s = ss.accept();
                 String ip = s.getInetAddress().getHostAddress();
                 if (!allowConnection(ip)) { s.close(); continue; }
-                new Thread(() -> {
-                    try {
-                        handleData(s);
-                    } finally {
-                        decActive(ip);
-                    }
-                }, "data-" + s.getPort()).start();
+                try {
+                    pool.execute(() -> {
+                        try {
+                            handleData(s);
+                        } finally {
+                            decActive(ip);
+                            closeQuiet(s);
+                        }
+                    });
+                } catch (RejectedExecutionException e) {
+                    decActive(ip);
+                    closeQuiet(s);
+                }
             }
         } catch (IOException e) {
             System.err.println("Data server stopped: " + e.getMessage());
@@ -140,7 +160,13 @@ public class RelayServer {
             String key = keyLine.substring(4).trim();
             if (!PasskeyUtil.isValidCustom(key)) { pw.println("ERR badkey"); closeQuiet(s); return; }
 
-            Pair pair = pairs.computeIfAbsent(key, k -> new Pair());
+            Pair pair;
+            if ("SENDER".equals(role)) {
+                pair = pairs.computeIfAbsent(key, k -> new Pair());
+            } else {
+                pair = pairs.get(key);
+                if (pair == null) { pw.println("ERR nopair"); closeQuiet(s); return; }
+            }
             boolean ready;
             synchronized (pair) {
                 if ("SENDER".equals(role)) { if (pair.controlSender != null) { pw.println("ERR duplicate"); return; } pair.controlSender = s; }
