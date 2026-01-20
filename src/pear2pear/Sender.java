@@ -15,7 +15,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 class Sender {
-    private static final String host = "57.128.212.68";
+    private static final String host = "51.195.103.164";
     private static final int GCM_IV_LENGTH = 12;
     private static final int GCM_TAG_LENGTH = 16;
     private static final int PBKDF2_ITER = 100_000;

@@ -60,7 +60,10 @@ public class RelayServer {
             while (true) {
                 Socket s = ss.accept();
                 String ip = s.getInetAddress().getHostAddress();
-                if (!allowConnection(ip)) { s.close(); continue; }
+                if (!allowConnection(ip)) {
+                    s.close();
+                    continue;
+                }
                 new Thread(() -> {
                     try {
                         handleControl(s);
