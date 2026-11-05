@@ -26,7 +26,7 @@ public class Pear {
     }
 
     private static void printUsage() {
-        System.out.println("Usage: java pear2pear/Pear.java [server|client]");
+        System.out.println("Usage: java pear2pear.Pear [server|client|relay]");
     }
 
 }
