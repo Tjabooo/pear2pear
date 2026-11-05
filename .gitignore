@@ -32,4 +32,4 @@ bin/
 .idea/
 
 ### Class files ###
-*.class
+*.class*.iml
